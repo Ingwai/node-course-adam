@@ -1,0 +1,40 @@
+<form method="POST" action="">
+    <div class="mb-3">
+        <label for="" class="form-label">Nazwa firmy</label>
+        <input type="text" name="name" value="<%= form.name %>"
+            class="form-control <%= errors?.name ? 'is-invalid' : '' %>">
+        <% if (errors?.name) { %>
+            <div class="invalid-feedback">
+                <%= errors.name.message %>
+            </div>
+            <% } %>
+                <div class="form-text">Przynjamniej 3 znaki</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="form-label">Slug</label>
+        <input type="text" name="slug" value="<%= form.slug %>" class="form-control 
+        <%= errors?.slug ? 'is-invalid' : '' %>">
+        <% if (errors?.slug) { %>
+            <div class="invalid-feedback">
+                <%= errors.slug.message %>
+            </div>
+            <% } %>
+                <div class="form-text">Przynjamniej 3 znaki</div>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="" class="form-label">Liczba pracowników</label>
+        <input type="text" name="employeesCount" value="<%= form.employeesCount %>" class="form-control">
+    </div>
+    <button class="btn btn-primary">
+        <%= buttonText %>
+    </button>
+</form>
+
+<% if (errors) { %>
+    <div class="alert alert-danger mt-3 text-center">
+        <h4>Popraw dane w formularzu</h4>
+    </div>
+    <% } %>

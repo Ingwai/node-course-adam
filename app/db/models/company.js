@@ -6,7 +6,7 @@ const companySchema = new Schema({
 	slug: {
 		type: String,
 		required: [true, 'Pole slug jest wymagane'],
-		minLength: [3, 'Za krótka nazwa. Minimum 3 znaki'],
+		minLength: [3, 'Za krótka nazwa. Minimum 3 znaki.'],
 		validate: value => checkForbidenString(value, 'slug'),
 		trim: true,
 		lowercase: true,
@@ -14,7 +14,7 @@ const companySchema = new Schema({
 	name: {
 		type: String,
 		required: [true, 'Pole name jest wymagane'],
-		minLength: [3, 'Za krótka nazwa. Minimum 3 znaki'],
+		minLength: [3, 'Za krótka nazwa. Minimum 3 znaki.'],
 	},
 	employeesCount: {
 		type: Number,
