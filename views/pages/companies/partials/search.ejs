@@ -1,0 +1,11 @@
+<!--  get bo będzie zczytywać z adresu url -->
+<div class="mt-3 mb-5 d-flex gap-2">
+    <input type="text" class="form-control" value="<%=query.q %>" placeholder="Szukaj" name="q">
+    <!-- definiujemy w middleware zmienną query i przekqzujemy do pola input query.q aby wyświetlić wyszukaną firmę -->
+    <button class="btn btn-primary">Szukaj</button>
+</div>
+
+
+<% if (query.q) { %>
+    <p class="h5 mb-4">Wyniki wyszukiwania dla frazy „<%= query.q %>”: </>
+            <% } %>

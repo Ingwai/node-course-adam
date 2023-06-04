@@ -1,18 +1,35 @@
 <h2 class="text-center">Lista firm: </h2>
-<ul>
-    <% companies.forEach(company=> { %>
-        <div class="card bg-light mb-3">
-            <div class="card-body">
-                <p class="h3 mb-4">
-                    <%= company.name %>
-                </p>
-                <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
-                <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-success">Edytuj</a>
-                <a href="admin/firmy/<%= company.slug %>/usun"
-                    onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')" class="btn btn-danger">Usuń</a>
-            </div>
 
+<form>
+
+    <%- include("partials/search")%>
+
+        <div class="row">
+            <div class="col-3">
+
+                <%- include("partials/filters")%>
+
+            </div>
+            <div class="col-9">
+                <% companies.forEach(company=> { %>
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <p class="h3 mb-4">
+                                <%= company.name %>
+                            </p>
+                            <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
+                            <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-success">Edytuj</a>
+                            <a href="admin/firmy/<%= company.slug %>/usun"
+                                onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')"
+                                class="btn btn-danger">Usuń</a>
+                        </div>
+
+                    </div>
+
+                    <% }); %>
+            </div>
         </div>
 
-        <% }); %>
-</ul>
+        <%- include("partials/pagination")%>
+
+</form>
