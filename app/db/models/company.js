@@ -10,11 +10,13 @@ const companySchema = new Schema({
 		validate: value => checkForbidenString(value, 'slug'),
 		trim: true,
 		lowercase: true,
+		unique: true,
 	},
 	name: {
 		type: String,
 		required: [true, 'Pole name jest wymagane'],
 		minLength: [3, 'Za krótka nazwa. Minimum 3 znaki.'],
+		unique: true,
 	},
 	employeesCount: {
 		type: Number,
