@@ -15,14 +15,23 @@
         <li class="nav-item">
           <a class="nav-link <%- url === '/firmy' ? 'active' : '' %>" href="/firmy">Firmy</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <%- url === '/zarejestruj' ? 'active' : '' %>" href="/zarejestruj">Rejestracja</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <%- url === '/admin/firmy/dodaj' ? 'active' : '' %>" href="/admin/firmy/dodaj">Dodaj
-            firmę</a>
-        </li>
+        <% if (!user) { %>
 
+          <li class="nav-item">
+            <a class="nav-link <%- url === '/zarejestruj' ? 'active' : '' %>" href="/zarejestruj">Rejestracja</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%- url === '/zaloguj' ? 'active' : '' %>" href="/zaloguj">Logowanie</a>
+          </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/profil">Profil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/wyloguj">Wyloguj</a>
+            </li>
+
+            <% } %>
       </ul>
     </div>
   </div>

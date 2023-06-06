@@ -17,6 +17,8 @@ const userSchema = new Schema({
 		required: [true, 'Pole hasło jest wymagane'],
 		minLength: [5, 'Hasło powinno mieć minimum 5 znaków.'],
 	},
+	firstName: String,
+	lastName: String,
 });
 
 // hashowanie hasła na polu password korzystamy z biblioteki node.bcrypt.js
@@ -42,6 +44,19 @@ userSchema.post('save', function (err, doc, next) {
 		err.errors = { email: { message: 'Taki email już istnieje' } };
 	}
 	next(err);
+});
+
+userSchema.methods = {
+	comparePassword(password) {
+		return bcrypt.compareSync(password, this.password);
+	},
+};
+
+// wirtualne pole
+userSchema.virtual('fullName').get(function () {
+	if (this.firstName && this.lastName) {
+		return `${this.firstName} ${this.lastName[0]}.`;
+	}
 });
 
 const User = mongoose.model('User', userSchema);

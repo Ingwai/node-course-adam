@@ -1,35 +1,55 @@
 <h2 class="text-center">Lista firm: </h2>
 
-<form>
-
-    <%- include("partials/search")%>
-
-        <div class="row">
-            <div class="col-3">
-
-                <%- include("partials/filters")%>
-
-            </div>
-            <div class="col-9">
-                <% companies.forEach(company=> { %>
-                    <div class="card bg-light mb-3">
-                        <div class="card-body">
-                            <p class="h3 mb-4">
-                                <%= company.name %>
-                            </p>
-                            <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
-                            <a href="admin/firmy/<%= company.slug %>/edytuj" class="btn btn-success">Edytuj</a>
-                            <a href="admin/firmy/<%= company.slug %>/usun"
-                                onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')"
-                                class="btn btn-danger">Usuń</a>
-                        </div>
-
-                    </div>
-
-                    <% }); %>
-            </div>
+<% if (user) { %>
+    <div class="row text-center">
+        <div class="col">
+            <a class="btn btn-success" href='/admin/firmy/dodaj'>Dodaj firmę</a>
         </div>
+    </div>
+    <% } %>
 
-        <%- include("partials/pagination")%>
+        <form>
+            <%- include("partials/search")%>
+                <div class="row">
+                    <div class="col-3">
+                        <%- include("partials/filters")%>
+                    </div>
+                    <div class="col-9">
+                        <% companies.forEach(company=> { %>
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <p class="h3 mb-4">
+                                        <%= company.name %>
+                                    </p>
+                                    <p>
+                                        Pracowników: <%= company.employeesCount%>
+                                    </p>
+                                    <p>
+                                        Kontakt: <%= company.user?.email %>
+                                    </p>
+                                    <p>
+                                        CEO: <%= company.user?.fullName%>
+                                    </p>
+                                    <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
 
-</form>
+
+                                    <% if (user) { %>
+                                        <% if (user._id===company.user?._id.toString()) { %>
+                                            <a href="admin/firmy/<%= company.slug %>/edytuj"
+                                                class="btn btn-success">Edytuj</a>
+                                            <a href="admin/firmy/<%= company.slug %>/usun"
+                                                onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')"
+                                                class="btn btn-danger">Usuń</a>
+                                            <% } %>
+                                </div>
+
+                            </div>
+                            <% } %>
+
+                                <% }); %>
+                    </div>
+                </div>
+
+                <%- include("partials/pagination")%>
+
+        </form>

@@ -2,9 +2,24 @@ const express = require('express');
 const path = require('path');
 const ejsLayouts = require('express-ejs-layouts');
 const app = express();
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const { sessionKeySecret } = require('./config');
 
 // init
 require('./db/mongoose');
+
+//middlware session logowania
+app.use(
+	session({
+		secret: sessionKeySecret,
+		saveUninitialized: true,
+		cookie: {
+			maxAge: 1000 * 60 * 60 * 24, //1 dzień
+			resave: false,
+		},
+	})
+);
 
 // view engine
 app.set('view engine', 'ejs');
@@ -25,7 +40,9 @@ app.use(express.urlencoded({ extended: true })); // application/x-www-form-urlen
 // app.use(express.json());
 
 // middleware
-app.use('/', require('./middleware/view-variables'));
+app.use('/', require('./middleware/view-variables-middleware'));
+app.use('/', require('./middleware/user-middleware'));
+app.use('/admin', require('./middleware/is-auth-middleware'));
 
 //mount routing
 app.use(require('./routes/web'));

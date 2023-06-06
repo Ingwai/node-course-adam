@@ -30,8 +30,8 @@ class CompanyController {
 			query = query.sort({ [s[0]]: s[1] }); //jest w MongoDB funkcja sort
 		}
 		// egzekwowanie (exec)
-		const companies = await query.exec();
-		const resultsCount = await Company.find(where).count();
+		const companies = await query.populate('user').exec();
+		const resultsCount = await Company.find(where).countDocuments();
 		const pagesCount = Math.ceil(resultsCount / perPage);
 		// exec() że uruchamiam wszystkie moje parametry
 		res.render('pages/companies/companies', {
@@ -60,6 +60,7 @@ class CompanyController {
 			name: req.body.name,
 			slug: req.body.slug,
 			employeesCount: req.body.employeesCount || undefined,
+			user: req.session.user._id,
 		});
 
 		try {

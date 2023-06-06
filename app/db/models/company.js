@@ -23,6 +23,12 @@ const companySchema = new Schema({
 		min: 1,
 		default: 1,
 	},
+
+	user: {
+		type: mongoose.Types.ObjectId, //specjalny typ pola mongoose
+		require: true,
+		ref: 'User',
+	},
 });
 
 // setter
