@@ -29,6 +29,7 @@ const companySchema = new Schema({
 		require: true,
 		ref: 'User',
 	},
+	image: String,
 });
 
 // setter

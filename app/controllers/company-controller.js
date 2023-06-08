@@ -1,4 +1,6 @@
 const Company = require('../db/models/company');
+const fs = require('fs');
+const { Parser } = require('json2csv');
 
 class CompanyController {
 	async showCompanies(req, res) {
@@ -61,6 +63,7 @@ class CompanyController {
 			slug: req.body.slug,
 			employeesCount: req.body.employeesCount || undefined,
 			user: req.session.user._id,
+			image: req.file.filename,
 		});
 
 		try {
@@ -90,6 +93,14 @@ class CompanyController {
 		company.slug = req.body.slug;
 		company.employeesCount = req.body.employeesCount;
 
+		if (req.file?.filename && company.image) {
+			fs.unlinkSync('public/uploads/' + company.image);
+		}
+
+		company.image = req.file?.filename || company.image;
+
+		//req.file bo multer tego wymaga nie jest to już body-parser
+
 		try {
 			await company.save();
 			res.redirect('/firmy');
@@ -105,11 +116,61 @@ class CompanyController {
 		const { name } = req.params;
 
 		try {
+			const company = await Company.findOne({ slug: name });
+			if (company.image) {
+				fs.unlinkSync('public/uploads/' + company.image);
+			}
 			await Company.deleteOne({ slug: name });
 			res.redirect('/firmy');
 		} catch (err) {
 			console.log(err.message);
 		}
+	}
+
+	async deleteImage(req, res) {
+		const { name } = req.params;
+		const company = await Company.findOne({ slug: name });
+
+		try {
+			fs.unlinkSync('public/uploads/' + company.image);
+			company.image = '';
+			company.save();
+			res.redirect('/firmy');
+		} catch (err) {
+			console.log(err.message);
+		}
+	}
+
+	async getCSV(req, res) {
+		//pola pliku csv sobie definiujemy
+		const fields = [
+			{
+				label: 'Nazwa',
+				value: 'name',
+			},
+			{
+				label: 'URL',
+				value: 'slug',
+			},
+			{
+				label: 'Liczba pracowników',
+				value: 'employeesCount',
+			},
+		];
+		// dane z bazy danych zaciągamy do zmiennej data
+		const data = await Company.find();
+		// nazwa pliku csv
+		const fileName = 'companies.csv';
+		// zmienna wywołująca obiekt Parser z biblioteki json2csv
+		const json2csv = new Parser({ fields });
+		const csv = json2csv.parse(data);
+
+		//te 3 linijki to express wysyłają pewne dane
+		res.header('Content-Type', 'text/csv');
+		res.attachment(fileName);
+		res.send(csv);
+
+		// żeby zamienić dane na csv instalujemy json2csv
 	}
 }
 

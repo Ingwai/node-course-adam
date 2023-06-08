@@ -4,6 +4,8 @@ const CompanyController = require('../controllers/company-controller');
 const UserController = require('../controllers/user-controller');
 const PageController = require('../controllers/page-controller');
 
+const upload = require('../services/uploader');
+
 router.get('/', PageController.showHome);
 
 router.get('/firmy/', CompanyController.showCompanies);
@@ -26,14 +28,24 @@ router.post('/admin/profil', UserController.updateProfile);
 
 router.get('/admin/firmy/dodaj', CompanyController.showCreateCompanyForm);
 
-router.post('/admin/firmy/dodaj', CompanyController.createCompany);
+router.post('/admin/firmy/dodaj', upload.single('image'), CompanyController.createCompany);
 
 router.get('/admin/firmy/:name/edytuj', CompanyController.showEditCompanyForm);
 
-router.post('/admin/firmy/:name/edytuj', CompanyController.editCompany);
+router.post(
+	'/admin/firmy/:name/edytuj',
+	upload.single('image'), //image bo w polu input name="image"
+	CompanyController.editCompany
+);
 
 router.get('/admin/firmy/:name/usun', CompanyController.deleteCompany);
+
+router.get('/admin/firmy/:name/usun-zdjecie', CompanyController.deleteImage);
+
+router.get('/csv', CompanyController.getCSV);
 
 router.get('*', PageController.showNotFound);
 
 module.exports = router;
+
+// multer o parser który obsługuje wysyłanie plików multipart dodaje się go w routingu tam gdzie potrzeba

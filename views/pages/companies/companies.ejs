@@ -7,6 +7,7 @@
         </div>
     </div>
     <% } %>
+        <a href='/csv'>Pobierz CSV z listą firm</a>
 
         <form>
             <%- include("partials/search")%>
@@ -18,35 +19,47 @@
                         <% companies.forEach(company=> { %>
                             <div class="card bg-light mb-3">
                                 <div class="card-body">
-                                    <p class="h3 mb-4">
-                                        <%= company.name %>
-                                    </p>
-                                    <p>
-                                        Pracowników: <%= company.employeesCount%>
-                                    </p>
-                                    <p>
-                                        Kontakt: <%= company.user?.email %>
-                                    </p>
-                                    <p>
-                                        CEO: <%= company.user?.fullName%>
-                                    </p>
-                                    <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
+
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <img src="/uploads/<%= company.image%>" alt="<%= company.image%>"
+                                                class="img-fluid">
+
+                                        </div>
+                                        <div class="col-9">
+                                            <p class="h3 mb-4">
+                                                <%= company.name %>
+                                            </p>
+                                            <p>
+                                                Pracowników: <%= company.employeesCount%>
+                                            </p>
+                                            <p>
+                                                Kontakt: <%= company.user?.email %>
+                                            </p>
+                                            <p>
+                                                CEO: <%= company.user?.fullName%>
+                                            </p>
+                                            <a href="/firmy/<%= company.slug %>" class="btn btn-primary">Zobacz</a>
 
 
-                                    <% if (user) { %>
-                                        <% if (user._id===company.user?._id.toString()) { %>
-                                            <a href="admin/firmy/<%= company.slug %>/edytuj"
-                                                class="btn btn-success">Edytuj</a>
-                                            <a href="admin/firmy/<%= company.slug %>/usun"
-                                                onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')"
-                                                class="btn btn-danger">Usuń</a>
-                                            <% } %>
+                                            <% if (user) { %>
+                                                <% if (user._id===company.user?._id.toString()) { %>
+                                                    <a href="admin/firmy/<%= company.slug %>/edytuj"
+                                                        class="btn btn-success">Edytuj</a>
+                                                    <a href="admin/firmy/<%= company.slug %>/usun"
+                                                        onclick="return confirm('Czy na pewno chcesz usunąć ten wpis')"
+                                                        class="btn btn-danger">Usuń</a>
+                                                    <% } %>
+                                                        <% } %>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             </div>
-                            <% } %>
 
-                                <% }); %>
+                            <% }); %>
                     </div>
                 </div>
 
