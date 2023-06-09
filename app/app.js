@@ -13,6 +13,7 @@ require('./db/mongoose');
 app.use(
 	session({
 		secret: sessionKeySecret,
+		resave: false,
 		saveUninitialized: true,
 		cookie: {
 			maxAge: 1000 * 60 * 60 * 24, //1 dzień
@@ -29,6 +30,8 @@ app.use(ejsLayouts);
 app.set('layout', 'layouts/main');
 // public folder
 app.use(express.static('public'));
+app.use(cookieParser());
+app.use(express.json());
 
 // body parser
 // body parser jest już wbudowany w expressa nie trzeba go zaciągać z zew biblioteki
@@ -45,6 +48,7 @@ app.use('/', require('./middleware/user-middleware'));
 app.use('/admin', require('./middleware/is-auth-middleware'));
 
 //mount routing
+app.use('/api', require('./routes/api'));
 app.use(require('./routes/web'));
 
 module.exports = app;

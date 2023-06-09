@@ -12,7 +12,6 @@ class UserController {
 			email: req.body.email,
 			password: req.body.password,
 		});
-
 		try {
 			await user.save();
 			res.redirect('/zaloguj');
@@ -21,6 +20,7 @@ class UserController {
 				errors: err.errors,
 				form: req.body,
 			});
+			console.log(err);
 		}
 	}
 

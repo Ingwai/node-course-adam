@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { validateEmail } = require('../validators');
 const bcrypt = require('bcrypt');
+const randomstring = require('randomstring');
 
 const userSchema = new Schema({
 	email: {
@@ -19,6 +20,7 @@ const userSchema = new Schema({
 	},
 	firstName: String,
 	lastName: String,
+	apiToken: String,
 });
 
 // hashowanie hasła na polu password korzystamy z biblioteki node.bcrypt.js
@@ -44,6 +46,16 @@ userSchema.post('save', function (err, doc, next) {
 		err.errors = { email: { message: 'Taki email już istnieje' } };
 	}
 	next(err);
+});
+
+userSchema.pre('save', function (next) {
+	// const user = this //this wskazuje na user
+	if (this.isNew) {
+		this.apiToken = randomstring.generate(30);
+	}
+	next();
+	// isNew to pole moongose
+	// token genujemy przez bibliotkę randomstring
 });
 
 userSchema.methods = {
