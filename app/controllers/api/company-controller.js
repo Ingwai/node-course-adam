@@ -16,7 +16,7 @@ class CompanyController {
 			slug: req.body.slug,
 			employeesCount: req.body.employeesCount,
 			user: req.body.user,
-			// user: req.session.user._id,
+			user: req.user._id,
 		});
 
 		try {
@@ -50,16 +50,15 @@ class CompanyController {
 
 	async delete(req, res) {
 		const { slug } = req.params;
-
+		const company = await Company.findOne({ slug: slug });
 		try {
-			const company = await Company.findOne({ slug: slug });
 			if (company.image) {
 				fs.unlinkSync('public/uploads/' + company.image);
 			}
-			await Company.deleteOne({ slug: slug });
+			await Company.deleteOne({ slug });
 			res.sendStatus(204);
 		} catch (err) {
-			res.status(422).json({ errors: err.errors });
+			// res.status(422).json({ errors: err.errors });
 		}
 	}
 }

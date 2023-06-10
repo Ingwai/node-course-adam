@@ -5,9 +5,23 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { sessionKeySecret } = require('./config');
-
+const helmet = require('helmet'); //biblioteka która dba o bezpioeczeństwo
+const rateLimiterMiddleware = require('./middleware/rate-limiter-middleware');
 // init
 require('./db/mongoose');
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				defaultSrc: ["'self'"],
+				scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+				styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+			},
+		},
+	})
+);
+
+app.use(rateLimiterMiddleware);
 
 //middlware session logowania
 app.use(
@@ -30,6 +44,7 @@ app.use(ejsLayouts);
 app.set('layout', 'layouts/main');
 // public folder
 app.use(express.static('public'));
+// app.use(express.static('public', { dotfiles: 'allow' })); //gdy nie obslugie plikow z kropka z przodu
 app.use(cookieParser());
 app.use(express.json());
 
